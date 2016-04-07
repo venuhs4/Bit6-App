@@ -1,0 +1,20 @@
+﻿<ion-view>
+    <ion-content class="padding has-header">
+        <ion-refresher on-refresh="refresh(true)" spinner="android"></ion-refresher>
+        <div class="list">
+            <div class="item item-text-wrap" ng-repeat="m in chat">
+                <h3>{{m.content}}</h3>
+                <p>{{m.created | customDate}}</p>
+                {{m}}
+            </div>
+        </div>
+    </ion-content>
+    <div class="item-input-inset" style="bottom: 0;position: absolute;width: 100%;">
+        <label class="item-input-wrapper">
+            <input type="text" placeholder="User" ng-model="data.message">
+        </label>
+        <button class="button button-clear" ng-click="sendMessage()">
+            Send
+        </button>
+    </div>
+</ion-view>

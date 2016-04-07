@@ -1,10 +1,16 @@
 ﻿<ion-view view-title="Home">
-    <ion-content class="padding">
+    <ion-content class="padding has-header">
         <ion-refresher on-refresh="refresh(true)" spinner="android"></ion-refresher>
         <ion-list>
-            <ion-item item="item">
-                Data goes here
-            </ion-item>
+            <a class="item item-icon-left" ng-repeat="(key,value) in conversations" ng-click="gotoChat(key)">
+                <i class="icon ion-person-stalker"></i>
+                <h2>{{key | uppercase}}</h2>
+                <span class="badge badge-assertive" ng-hide="value.unread == 0">{{value.unread}}</span>
+                <p style="text-align: right;">{{value.updated | customDate}}</p>
+            </a>
         </ion-list>
     </ion-content>
+    <div class="bar bar-footer bar-dark">
+        <button class="button" ng-click="createChat()">Create chat</button>
+    </div>
 </ion-view>

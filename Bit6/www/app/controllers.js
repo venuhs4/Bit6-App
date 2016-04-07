@@ -1,42 +1,82 @@
 ﻿(function () {
     "use strict";
 
-    angular.module("myapp.controllers", [])
+    angular.module("myapp.controllers", ['ngCordova'])
 
     .controller("appCtrl", ["$scope", function ($scope) {
+        console.log("appCtrl initialized");
     }])
-
-    //homeCtrl provides the logic for the home screen
-    .controller("homeCtrl", ["$scope", "$state", function ($scope, $state) {
+    .controller("homeCtrl", ["$scope", "$state", "$popup", function ($scope, $state, $popup) {
+        console.log("ionic controller");
+        $scope.conversations = getLocalObject("conversations");
         $scope.refresh = function () {
-            //refresh binding
-            $scope.$broadcast("scroll.refreshComplete");
+            //$scope.$broadcast("scroll.refreshComplete");
+            console.log(b6);
+            $scope.conversations = b6.conversations;
+        };
+        b6Events.addEventListener("onSignIn", function () {
+            $scope.conversations = b6.conversations;
+        });
+        b6Events.addEventListener("onConversation", function () {
+            $scope.conversations = b6.conversations;
+        });
+
+        $scope.createChat = function () {
+            $scope.data = {};
+            $popup.getData('Enter user', $scope).then(function () {
+                console.log($scope.data.text);
+                if (!angular.isUndefined($scope.data.text) && $scope.data.text != "") {
+                    sendMessage($scope.data.text);
+                    $scope.conversations = b6.conversations;
+                }
+            });
+        };
+        $scope.gotoChat = function (key) {
+            $state.go('app.chat', { key: key });
+        }
+    }])
+    .controller("chatCtrl", ["$scope", "$state", "$popup","$stateParams", function ($scope, $state, $popup,$stateParams) {
+        $scope.chat = b6.conversations[$stateParams.key].messages;
+        $scope.data = {
+            message: ""
+        };
+        $scope.refresh = function () {
+            $scope.chat = b6.conversations[$stateParams.key].messages;
+        };
+
+        b6Events.addEventListener("onConversation", function () {
+            $scope.chat = b6.conversations[$stateParams.key].messages;
+        });
+        $scope.sendMessage = function () {
+            if($scope.data.message.length > 0)
+            {
+                sendMessage($stateParams.key.replace(/^usr:/, ""),$scope.data.message);
+            }
         };
     }])
+    .controller('loginCtrl', ['$scope', '$state', function ($scope, $state) {
 
-    //errorCtrl managed the display of error messages bubbled up from other controllers, directives, myappService
-    .controller("errorCtrl", ["$scope", "myappService", function ($scope, myappService) {
-        //public properties that define the error message and if an error is present
-        $scope.error = "";
-        $scope.activeError = false;
-
-        //function to dismiss an active error
-        $scope.dismissError = function () {
-            $scope.activeError = false;
+        $scope.data = { user: getLocalObject('user') == undefined ? "" : getLocalObject('user').usr }
+        $scope.signIn = function () {
+            if (signIn($scope.data.user, '1234')) {
+                $state.go("app.home");
+            }
         };
-
-        //broadcast event to catch an error and display it in the error section
-        $scope.$on("error", function (evt, val) {
-            //set the error message and mark activeError to true
-            $scope.error = val;
-            $scope.activeError = true;
-
-            //stop any waiting indicators (including scroll refreshes)
-            myappService.wait(false);
-            $scope.$broadcast("scroll.refreshComplete");
-
-            //manually apply given the way this might bubble up async
-            $scope.$apply();
-        });
-    }]);
+        $scope.signUp = function () {
+            if (isDevice()) {
+                navigator.notification.confirm("Are you sure you want to Sign Up as a new user?", function (button) {
+                    if (button == 1) {
+                        if (signUp($scope.data.user, '1234')) {
+                            $state.go("app.home");
+                        }
+                    }
+                }, "Sign Up Confirm", "Yes,No");
+            }
+            else {
+                if (signUp($scope.data.user, '1234')) {
+                    $state.go("app.home");
+                }
+            }
+        };
+    }])
 })();

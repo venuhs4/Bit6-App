@@ -31,22 +31,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-file-transfer": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-file-transfer@~1.5.0"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-geolocation": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-geolocation@~2.1.0"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-network-information": {
         "source": {
             "type": "registry",
@@ -63,26 +47,19 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-device-orientation": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-device-orientation@~1.0.2"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-contacts": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-contacts@~2.0.1"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-whitelist": {
         "source": {
             "type": "registry",
             "id": "cordova-plugin-whitelist@1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.bit6.sdk": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bit6/bit6-cordova.git",
+            "subdir": "."
         },
         "is_top_level": true,
         "variables": {}
